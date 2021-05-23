@@ -8,7 +8,7 @@ TOWERS =\
                 { # Niveau 1
                     'shortcut':      pygame.K_q, 
                     'cost':          40,
-                    'damage':        60,
+                    'damage':        80,
                     'reload_time':   30,
                     'splash radius': 0,
                     'image_path':    'images/tour_pourpre.png',
@@ -18,7 +18,7 @@ TOWERS =\
                 { # Niveau 2
                     'shortcut':      pygame.K_q, 
                     'cost':          200,
-                    'damage':        300,
+                    'damage':        500,
                     'reload_time':   15,
                     'splash radius': 0,
                     'image_path':    'images/tour_pourpre_2.png',
@@ -28,7 +28,7 @@ TOWERS =\
                 { # Niveau 3
                     'shortcut':      pygame.K_q, 
                     'cost':          1000,
-                    'damage':        600,
+                    'damage':        1200,
                     'reload_time':   5,
                     'splash radius': 0,
                     'image_path':    'images/tour_pourpre_3.png',
@@ -53,7 +53,7 @@ TOWERS =\
                 {
                     'shortcut':      pygame.K_s, 
                     'cost':          250,
-                    'damage':        500,
+                    'damage':        200,
                     'reload_time':   40,
                     'splash radius': 5 * GRID_WIDTH,
                     'attack_range':  300,
@@ -63,7 +63,7 @@ TOWERS =\
                 {
                     'shortcut':      pygame.K_s, 
                     'cost':          1200,
-                    'damage':        800,
+                    'damage':        500,
                     'reload_time':   40,
                     'splash radius': 10 * GRID_WIDTH,
                     'attack_range':  300,
