@@ -1,23 +1,24 @@
 import pygame
 from pygame.sprite import Sprite, Group
 from constants import *
+from chemin    import Path
 
 class Creeps(Sprite):
+    path: Path
 
     group = Group()
 
-    def __init__(self, hp, speed, path, image=PERE_NOEL):
+    def __init__(self, param_dict, image=PERE_NOEL):
         super().__init__()
-        self.speed     = speed
-        self.max_speed = speed
-        self.hp        = hp
-        self.hp_max    = hp
+        for key, value in param_dict.items():
+            self.__setattr__(key, value)
+        self.max_speed = self.speed
+        self.hp_max    = self.hp
+        self.path      = self.path.path
         self.image     = image
         self.rect      = self.image.get_rect()
-        self.path      = path
 
         self.slow_counter = 0
-        self.is_slowed = False
 
         Creeps.group.add(self)
 
@@ -30,8 +31,6 @@ class Creeps(Sprite):
 
     def lose_hp(self, hp):
         self.hp -= hp
-        if self.hp <= 0:
-            self.die()
             
     def update_health_bar(self, surface):
         color = (255, 50, 50)

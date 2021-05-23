@@ -16,4 +16,4 @@ class Wave:
             hp    = param_dict['hp']
             speed = param_dict['speed']
             position = pygame.Rect(randint(40, WIDTH -120), -randint(0, 1000), GRID_WIDTH, GRID_WIDTH)
-            Creeps(hp, speed, Path.path).spawn(position)
+            Creeps(param_dict).spawn(position)

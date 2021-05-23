@@ -59,6 +59,9 @@ class Game():
                 creep.recover_max_speed()
             else:
                 creep.slow_counter -= 1
+            if creep.hp <= 0:
+                self.player.get_income(creep.creep_income)
+                creep.die()
             creep.move()
             creep.update_health_bar(window)
             window.blit(creep.image, creep.rect)
@@ -74,6 +77,7 @@ class Game():
             self.compteur = 0
             try:
                 Wave(self.wave).spawn()
+                self.player.get_income(WAVES[self.wave]['start_income'])
             except Exception:
                 self.wave -= 1
                 Wave(self.wave).spawn()
