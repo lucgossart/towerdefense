@@ -34,3 +34,8 @@ Configuration :
 1. des vagues dans `waves_config.py`,
 2. des tours dans tower_config.py,
 3. d'autres trucs dans constants.py.
+
+## Télécharger la dernière version
+`git add -u`  
+`git commit -m "message non vide quelqconque"`  
+`git pull`
