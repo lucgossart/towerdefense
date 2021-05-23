@@ -1,3 +1,5 @@
+from tower_config import TOWERS
+from waves_config import WAVES
 from creeps import Creeps
 from chemin import Path
 from random import randint

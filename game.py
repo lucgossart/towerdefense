@@ -2,6 +2,8 @@ import pygame
 import pygame.sprite
 from pygame.sprite import Sprite, Group
 from constants import *
+from tower_config import TOWERS
+from waves_config import WAVES
 from projectiles import Projectiles
 from towers      import TowerFactory
 from player      import Player
@@ -85,6 +87,7 @@ class Game():
         self.compteur += 1
 
         pygame.display.update()
+
         
 
     def update(self):
@@ -95,21 +98,29 @@ class Game():
     def move_cursor(self):
 
         if self.pressed_keys.get(DOWN):
+            if self.cursor.image == SELECTED_TOWER:
+                self.cursor.image = CURSOR_IMAGE
             self.cursor.move_down()
 
         if self.pressed_keys.get(UP):
+            if self.cursor.image == SELECTED_TOWER:
+                self.cursor.image = CURSOR_IMAGE
             self.cursor.move_up()
 
         if self.pressed_keys.get(RIGHT):
+            if self.cursor.image == SELECTED_TOWER:
+                self.cursor.image = CURSOR_IMAGE
             self.cursor.move_right()
 
         if self.pressed_keys.get(LEFT):
+            if self.cursor.image == SELECTED_TOWER:
+                self.cursor.image = CURSOR_IMAGE
             self.cursor.move_left()
 
     def update_cursor_state(self):
 
         for key, value in TOWERS.items():
-            if self.pressed_keys.get(value['shortcut']) and self.cursor.current_state == self.cursor:
+            if self.pressed_keys.get(value[0]['shortcut']) and self.cursor.current_state == self.cursor:
                 self.cursor.current_state = TowerFactory.create_tower(key, self.cursor.rect)
 
         if self.pressed_keys.get(CANCEL) and self.cursor.current_state != self.cursor:
@@ -121,6 +132,29 @@ class Game():
             self.pop_tower()
             self.cursor.current_state = self.cursor
             self.cursor.image = CURSOR_IMAGE
+
+        if self.pressed_keys.get(SELECT_NEXT_TOWER):
+            minimal_abscissa_difference = 10_000
+            for tower in Tower.group:
+                abscissa_difference = (tower.rect.x - self.cursor.rect.x) % WIDTH
+                if 0 < abscissa_difference < minimal_abscissa_difference:
+                    tower_with_closest_larger_abscissa = tower
+                    minimal_abscissa_difference = abscissa_difference
+            self.selected_tower   = tower_with_closest_larger_abscissa
+            self.cursor.image     = SELECTED_TOWER
+            self.cursor.rect.x    = tower_with_closest_larger_abscissa.rect.x
+            self.cursor.rect.y    = tower_with_closest_larger_abscissa.rect.y
+
+        if self.pressed_keys.get(UPGRADE_TOWER):
+            try:
+                cost = TOWERS[self.selected_tower.type][self.selected_tower.level + 1]['cost']
+                if self.player.gold >= cost:
+                    self.player.pay(cost)
+                    self.selected_tower.upgrade()
+                else:
+                    print("Il faut", cost, "gold pour l'upgrade")
+            except Exception as e:
+                print(e)
 
     def pop_tower(self):
 

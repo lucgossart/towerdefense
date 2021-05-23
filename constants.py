@@ -11,119 +11,21 @@ LEFT   = pygame.K_h
 DROP   = pygame.K_RETURN
 CANCEL = pygame.K_ESCAPE
 
+UPGRADE_TOWER     = pygame.K_u
+SELECT_NEXT_TOWER = pygame.K_TAB
 
-WAVES =\
-[
-    {
-        'number_of_creeps': 15,
-        'hp': 200,
-        'speed': 2,
-        'creep_income': 1,
-        'start_income': 0,
-        'path': DefaultPath
-    },
-
-    {
-        'number_of_creeps': 20,
-        'hp': 400,
-        'speed': 2,
-        'creep_income': 2,
-        'start_income': 50,
-        'path': DefaultPath
-    },
-
-    {
-        'number_of_creeps': 30,
-        'hp': 500,
-        'speed': 3,
-        'creep_income': 3,
-        'start_income': 50,
-        'path': DefaultPath
-    },
-
-    {
-        'number_of_creeps': 50,
-        'hp': 500,
-        'speed': 4,
-        'creep_income': 3,
-        'start_income': 50,
-        'path': DefaultPath
-    },
-
-    {
-        'number_of_creeps': 3,
-        'hp': 5500,
-        'speed': 8,
-        'creep_income': 100,
-        'start_income': 50,
-        'path': DefaultPath
-    },
-
-    {
-        'number_of_creeps': 200,
-        'hp': 500,
-        'speed': 4,
-        'creep_income': 3,
-        'start_income': 50,
-        'path': DefaultPath
-    },
-
-    {
-        'number_of_creeps': 200,
-        'hp': 500,
-        'speed': 4,
-        'creep_income': 3,
-        'start_income': 50,
-        'path': DroitDevant
-    }
-]
 
 GRID_WIDTH      = 40
 PROJECTILE_SIZE = 40
 
+TOWER_HEIGHT = 60
+TOWER_WIDTH  = 40
+
 FPS = 60
 
-TOWERS =\
-{
-    # tour basique
-    'red': {
-        'shortcut':      pygame.K_q, 
-        'cost':          10,
-        'damage':        60,
-        'reload_time':   30,
-        'splash radius': 0,
-        'image_path':    'images/tour_pourpre.png',
-        'attack_range':  600,
-    },
-
-    # dégâts de zone
-    'orange': {
-        'shortcut':      pygame.K_s, 
-        'cost':          20,
-        'damage':        40,
-        'reload_time':   40,
-        'splash radius': 5 * GRID_WIDTH,
-        'attack_range':  300,
-        'image_path':    'images/tour_orange.png'
-    },
-
-    # ralentit les creeps
-    'blue': {
-        'shortcut':      pygame.K_d, 
-        'cost':          10,
-        'damage':        0,
-        'reload_time':   90,
-        'splash radius': 2 * GRID_WIDTH,
-        'attack_range':  200,
-        'slow_duration': 10 * FPS,
-        'slow_rate':     0.95,        # À chaque projectile, la vitesse est multipliée par slow_rate
-        'image_path':    'images/tour_bleue.png'
-    }
-}
-
-WIDTH, HEIGHT   = 640, 960
-CREEP_WIDTH     = 100
-CREEP_HEIGHT    = 100
+WIDTH, HEIGHT = 639, 960
+CREEP_WIDTH   = 100
+CREEP_HEIGHT  = 100
 
 CURSOR_IMAGE = pygame.image.load('images/cursor.png')
 CURSOR_IMAGE = pygame.transform.scale(CURSOR_IMAGE, (GRID_WIDTH, GRID_WIDTH))
@@ -140,11 +42,12 @@ BOMB_IMAGE = pygame.transform.scale(BOMB_IMAGE, (PROJECTILE_SIZE, PROJECTILE_SIZ
 SHURIKEN_IMAGE = pygame.image.load('images/Air Shuriken.svg')
 SHURIKEN_IMAGE = pygame.transform.scale(SHURIKEN_IMAGE, (PROJECTILE_SIZE, PROJECTILE_SIZE))
 
+SELECTED_TOWER = pygame.image.load('images/selection_cursor.png')
+SELECTED_TOWER = pygame.transform.scale(SELECTED_TOWER, (TOWER_WIDTH + 10, TOWER_HEIGHT + 10))
+
 FONT       = "Perpetua"
 FONT_SIZE  = 40
 FONT_COLOR = (255, 125, 0) # (r, g, b)
 
 
 
-TOWER_HEIGHT = 60
-TOWER_WIDTH  = 40

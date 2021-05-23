@@ -28,6 +28,12 @@ class Cursor(Sprite):
         self.rect.y += GRID_WIDTH
         self.rect.y %= HEIGHT
 
+    def select_tower(self, tower_generator):
+        tower = next(tower_generator)
+        self.rect = tower.rect
+        return tower
+
+
 
 
 

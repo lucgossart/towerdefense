@@ -1,4 +1,6 @@
 import pygame
+from tower_config  import TOWERS
+from waves_config  import WAVES
 from pygame.sprite import Sprite, Group
 from abc           import ABC, abstractmethod
 from constants     import *
@@ -16,15 +18,34 @@ class Tower(Sprite, ABC):
 
     group = Group()
 
-    def __init__(self, properties_dict):
+    def __init__(self, properties_dict_list, type_):
         super().__init__()
-        for key, value in properties_dict.items():
+        self.level = 0
+        self.properties_dict_list = properties_dict_list
+        for key, value in properties_dict_list[0].items():
             self.__setattr__(key, value)
+
         self.reloading_time = 0
+        self.type           = type_
         
         self.image = pygame.image.load(self.image_path).convert()
         self.image = pygame.transform.scale(self.image, (TOWER_WIDTH, TOWER_HEIGHT))
         Tower.group.add(self)
+
+    def upgrade(self):
+        self.level += 1
+        try:
+            for key, value in self.properties_dict_list[self.level].items():
+                self.__setattr__(key, value)
+        except Exception as e:
+            print(e)
+        self.upgrade_projectile()
+        self.image = pygame.image.load(self.image_path).convert()
+        self.image = pygame.transform.scale(self.image, (TOWER_WIDTH, TOWER_HEIGHT))
+    
+    @abstractmethod
+    def upgrade_projectile(self):
+        pass
 
     def attack(self):
         for creep in Creeps.group:
@@ -36,25 +57,39 @@ class Tower(Sprite, ABC):
 
 
 class RedTower(Tower):
+
     def __init__(self, rectangle):
-        super().__init__(TOWERS['red'])
-        self.projectile = Spear
+        super().__init__(TOWERS['red'], 'red')
+        self.projectile = lambda *args: Spear(*args, level=0)
         self.rect       = self.image.get_rect()
         self.rect       = rectangle
+
+    def upgrade_projectile(self):
+        self.projectile = lambda *args: Spear(*args, level=self.level)
+    
 
 class OrangeTower(Tower):
+
     def __init__(self, rectangle):
-        super().__init__(TOWERS['orange'])
-        self.projectile = Bomb
+        super().__init__(TOWERS['orange'], 'orange')
+        self.projectile = lambda *args: Bomb(*args, level=0)
         self.rect       = self.image.get_rect()
         self.rect       = rectangle
 
+    def upgrade_projectile(self):
+        self.projectile = lambda *args: Bomb(*args, level=self.level)
+
 class BlueTower(Tower):
+
     def __init__(self, rectangle):
-        super().__init__(TOWERS['blue'])
-        self.projectile = Shuriken
+        super().__init__(TOWERS['blue'], 'blue')
+        self.projectile = lambda *args: Shuriken(*args, level=0)
         self.rect       = self.image.get_rect()
         self.rect       = rectangle
+
+    def upgrade_projectile(self):
+        self.projectile = lambda *args: Shuriken(*args, level=self.level)
+
 
 class TowerFactory:
     def __init__(self):
