@@ -7,6 +7,7 @@
 `git clone https://github.com/lucgossart/towerdefense`    
 `cd towerdefense`
 `brew install python`
+`pip install pygame`
 
 ## Jouer
 
