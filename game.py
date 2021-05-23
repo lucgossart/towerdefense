@@ -27,20 +27,34 @@ class Game():
         self.compteur      = 0
         self.wave          = 0
 
+        self.add_message('score', "Score:", (0, 0))
+        self.add_message('gold',  "Gold: ", (0, 40))
+        self.add_message('hp',    "HP:   ", (0, 80))
+
     def draw(self):
 
         window.blit(background, (0, 0))
         window.blit(self.cursor.image, (self.cursor.rect.x % WIDTH, self.cursor.rect.y % HEIGHT))
+
+        if self.player.hp <= 0:
+            window.blit(self.font.render("NOOB", True, FONT_COLOR), (300, 450))
+
+        for key, (text, position) in self.messages.items():
+            message_surface = self.font.render(text + str(self.player.__getattribute__(key)), True, FONT_COLOR)
+            window.blit(message_surface, position)
 
         for tower in Tower.group:
             window.blit(tower.image, tower.rect)
             tower.attack()
             tower.reloading_time -= 1
 
-        for message, position in self.messages.values():
-            window.blit(message, position)
+        # for message, position in self.messages.values():
+        #     window.blit(message, position)
 
         for creep in Creeps.group:
+            if creep.rect.y > HEIGHT:
+                self.player.hp -= 1
+                creep.kill()
             creep.move()
             window.blit(creep.image, creep.rect)
 
@@ -50,7 +64,6 @@ class Game():
 
         self.handle_collisions()
 
-        pygame.display.update()
 
         if self.compteur % 1200 == 0:
             self.compteur = 0
@@ -61,6 +74,8 @@ class Game():
                 Wave(self.wave).spawn()
             self.wave += 1
         self.compteur += 1
+
+        pygame.display.update()
         
 
     def update(self):
@@ -84,10 +99,11 @@ class Game():
 
     def update_cursor_state(self):
 
-        if self.pressed_keys.get(TOUR_POURPRE):
+        if self.pressed_keys.get(TOUR_POURPRE) and self.cursor.current_state == self.cursor:
             self.cursor.current_state = RedTower(self.cursor.rect)
 
-        if self.pressed_keys.get(CANCEL):
+        if self.pressed_keys.get(CANCEL) and self.cursor.current_state != self.cursor:
+            self.cursor.current_state.kill()
             self.cursor.current_state = self.cursor
             self.cursor.image = CURSOR_IMAGE
 
@@ -95,8 +111,6 @@ class Game():
             self.pop_tower()
             self.cursor.current_state = self.cursor
             self.cursor.image = CURSOR_IMAGE
-
-        self.cursor.image = self.cursor.current_state.image
 
     def pop_tower(self):
 
@@ -109,9 +123,9 @@ class Game():
         self.player.pay(tower.cost)
         self.cursor.current_state.rect = pygame.Rect(self.cursor.rect.x, self.cursor.rect.y, GRID_WIDTH, TOWER_HEIGHT)
 
-    def add_message(self, key, message, position):
-        message_surface = self.font.render(message, True, FONT_COLOR)
-        self.messages[key] = (message_surface, position)
+    def add_message(self, key, text, position):
+        # message_surface = self.font.render(message, True, FONT_COLOR)
+        self.messages[key] = (text, position)
 
     def handle_collisions(self):
         collision_dict = pygame.sprite.groupcollide(Projectiles.group, Creeps.group, True, False)

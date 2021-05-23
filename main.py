@@ -26,8 +26,6 @@ def main():
         compteur += 1
         compteur %= 5
 
-        game.add_message('score', f"Score: {game.player.score}", (0, 0))
-        game.add_message('gold',  f"Gold:  {game.player.gold}",  (0, 40))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
