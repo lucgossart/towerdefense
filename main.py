@@ -1,7 +1,10 @@
 import pygame
-from graphics  import Game
-from constants import *
-import towers
+from towers      import RedTower
+from constants   import *
+from game        import Game
+from creeps      import Creeps
+from projectiles import Spear
+from vector      import Vector
 
 
 def main():
@@ -13,13 +16,18 @@ def main():
     compteur      = 0
 
     
-    test = towers.RedTower(pygame.Rect(80,80,40,40))
-    game.towers.add(test)
-
+    # RedTower(pygame.Rect(80,80,40,40))
+    Creeps(100, 2).spawn(pygame.Rect(160, 800, CREEP_WIDTH, CREEP_HEIGHT))
+    Creeps(100, 2).spawn(pygame.Rect(160, 1200, CREEP_WIDTH, CREEP_HEIGHT))
+    
     while run:
+
         clock.tick(FPS)
         compteur += 1
         compteur %= 5
+
+        game.add_message('score', f"Score: {game.player.score}", (0, 0))
+        game.add_message('gold',  f"Gold:  {game.player.gold}",  (0, 40))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
