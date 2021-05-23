@@ -3,7 +3,7 @@ import pygame.sprite
 from pygame.sprite import Sprite, Group
 from constants import *
 from projectiles import Projectiles
-from towers      import RedTower
+from towers      import TowerFactory
 from player      import Player
 from creeps      import Creeps
 from cursor      import Cursor
@@ -55,7 +55,10 @@ class Game():
             if creep.rect.y > HEIGHT:
                 self.player.hp -= 1
                 creep.kill()
+            if creep.slow_counter == 0 and creep.speed != creep.max_speed:
+                creep.recover_max_speed()
             creep.move()
+            creep.update_health_bar(window)
             window.blit(creep.image, creep.rect)
 
         for projectile in Projectiles.group:
@@ -99,8 +102,9 @@ class Game():
 
     def update_cursor_state(self):
 
-        if self.pressed_keys.get(TOUR_POURPRE) and self.cursor.current_state == self.cursor:
-            self.cursor.current_state = RedTower(self.cursor.rect)
+        for key, value in TOWERS.items():
+            if self.pressed_keys.get(value['shortcut']) and self.cursor.current_state == self.cursor:
+                self.cursor.current_state = TowerFactory.create_tower(key, self.cursor.rect)
 
         if self.pressed_keys.get(CANCEL) and self.cursor.current_state != self.cursor:
             self.cursor.current_state.kill()

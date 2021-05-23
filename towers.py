@@ -1,25 +1,29 @@
 import pygame
-
 from pygame.sprite import Sprite, Group
 from abc           import ABC, abstractmethod
 from constants     import *
-from projectiles   import Spear
+from projectiles   import Spear, Projectiles, Bomb, Shuriken
 from vector        import Vector
 from creeps        import Creeps
 
 class Tower(Sprite, ABC):
-    image: pygame.sprite.Sprite
-    rect:  pygame.Rect
+    image_path:   str
+    attack_range: int
+    projectile:   Projectiles
+    reload_time:  int
+    image:        pygame.sprite.Sprite # non
+    rect:         pygame.Rect
 
     group = Group()
 
-    def __init__(self, attack_range, attack_rate, projectile):
+    def __init__(self, properties_dict):
         super().__init__()
-        self.attack_range   = attack_range
-        self.attack_rate    = attack_rate
-        self.projectile     = projectile
+        for key, value in properties_dict.items():
+            self.__setattr__(key, value)
         self.reloading_time = 0
         
+        self.image = pygame.image.load(self.image_path).convert()
+        self.image = pygame.transform.scale(self.image, (TOWER_WIDTH, TOWER_HEIGHT))
         Tower.group.add(self)
 
     def attack(self):
@@ -27,23 +31,41 @@ class Tower(Sprite, ABC):
             vector = Vector(creep.rect.x - self.rect.x, creep.rect.y - self.rect.y)
             if vector.norm() <= self.attack_range and self.reloading_time <= 0:
                 self.projectile(self.rect, (1/20) * vector)
-                self.reloading_time = self.attack_rate
+                self.reloading_time = self.reload_time
                 return
 
 
-
 class RedTower(Tower):
-
     def __init__(self, rectangle):
-        super().__init__(600, 30, Spear)
-        self.image  = pygame.image.load('images/tour_pourpre.png').convert()
-        self.image  = pygame.transform.scale(self.image, (TOWER_WIDTH, TOWER_HEIGHT))
-        self.rect   = self.image.get_rect()
-        self.rect   = rectangle
-        self.cost   = RED_TOWER_COST
+        super().__init__(TOWERS['red'])
+        self.projectile = Spear
+        self.rect       = self.image.get_rect()
+        self.rect       = rectangle
 
+class OrangeTower(Tower):
+    def __init__(self, rectangle):
+        super().__init__(TOWERS['orange'])
+        self.projectile = Bomb
+        self.rect       = self.image.get_rect()
+        self.rect       = rectangle
 
+class BlueTower(Tower):
+    def __init__(self, rectangle):
+        super().__init__(TOWERS['blue'])
+        self.projectile = Shuriken
+        self.rect       = self.image.get_rect()
+        self.rect       = rectangle
 
-
+class TowerFactory:
+    def __init__(self):
+        pass
+    @staticmethod
+    def create_tower(keyword, rectangle):
+        if keyword == 'red':
+            return RedTower(rectangle)
+        if keyword == 'blue':
+            return BlueTower(rectangle)
+        if keyword == 'orange':
+            return OrangeTower(rectangle)
 
 
