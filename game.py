@@ -130,20 +130,10 @@ class Game():
 
         if self.pressed_keys.get(DROP) and self.cursor.current_state != self.cursor:
             self.pop_tower()
-            self.cursor.current_state = self.cursor
-            self.cursor.image = CURSOR_IMAGE
 
         if self.pressed_keys.get(SELECT_NEXT_TOWER):
-            minimal_abscissa_difference = 10_000
-            for tower in Tower.group:
-                abscissa_difference = (tower.rect.x - self.cursor.rect.x) % WIDTH
-                if 0 < abscissa_difference < minimal_abscissa_difference:
-                    tower_with_closest_larger_abscissa = tower
-                    minimal_abscissa_difference = abscissa_difference
-            self.selected_tower   = tower_with_closest_larger_abscissa
-            self.cursor.image     = SELECTED_TOWER
-            self.cursor.rect.x    = tower_with_closest_larger_abscissa.rect.x
-            self.cursor.rect.y    = tower_with_closest_larger_abscissa.rect.y
+            tower = self.select_next_tower()
+            self.cursor.image = SELECTED_TOWER
 
         if self.pressed_keys.get(UPGRADE_TOWER):
             try:
@@ -156,16 +146,44 @@ class Game():
             except Exception as e:
                 print(e)
 
+    def select_next_tower(self):
+
+        minimal_abscissa_difference = 10_000
+        minimal_ordinate_difference = 10_000
+
+        for tower in Tower.group:
+
+            ordinate_difference = ((tower.rect.y - self.cursor.rect.y) - 5)
+            abscissa_difference = ((tower.rect.x - self.cursor.rect.x) - 5) % WIDTH
+            minimal_ordinate = 10_000
+
+            if abscissa_difference == 0 and 0 < ordinate_difference < minimal_ordinate_difference:
+                minimal_abscissa_difference = 0
+                minimal_ordinate_difference = ordinate_difference
+                self.selected_tower = tower
+
+            if 0 < abscissa_difference <= minimal_abscissa_difference and tower.rect.y <= minimal_ordinate:
+                minimal_abscissa_difference = abscissa_difference
+                minimal_ordinate = tower.rect.y
+                self.selected_tower = tower
+
+        self.cursor.image     = SELECTED_TOWER
+        self.cursor.rect.x    = self.selected_tower.rect.x - 5
+        self.cursor.rect.y    = self.selected_tower.rect.y - 5
+
     def pop_tower(self):
 
         tower = self.cursor.current_state
         if self.player.gold < tower.cost:
-            print("Pas assez riche")
+            print("Pas assez riche, il faut", tower.cost)
             return
 
         Tower.group.add(tower)
         self.player.pay(tower.cost)
         self.cursor.current_state.rect = pygame.Rect(self.cursor.rect.x, self.cursor.rect.y, GRID_WIDTH, TOWER_HEIGHT)
+
+        self.cursor.current_state = self.cursor
+        self.cursor.image = CURSOR_IMAGE
 
     def add_message(self, key, text, position):
         # message_surface = self.font.render(message, True, FONT_COLOR)
