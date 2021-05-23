@@ -6,7 +6,7 @@ class Creeps(Sprite):
 
     group = Group()
 
-    def __init__(self, hp, speed, image=PERE_NOEL):
+    def __init__(self, hp, speed, path, image=PERE_NOEL):
         super().__init__()
         self.speed     = speed
         self.max_speed = speed
@@ -14,6 +14,7 @@ class Creeps(Sprite):
         self.hp_max    = hp
         self.image     = image
         self.rect      = self.image.get_rect()
+        self.path      = path
 
         self.slow_counter = 0
         self.is_slowed = False
@@ -21,7 +22,8 @@ class Creeps(Sprite):
         Creeps.group.add(self)
 
     def move(self):
-        self.rect.y += self.speed
+        self.rect.x += self.speed * self.path(self.rect.x, self.rect.y).x
+        self.rect.y += self.speed * self.path(self.rect.x, self.rect.y).y
 
     def spawn(self, position):
         self.rect = position

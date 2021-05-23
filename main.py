@@ -17,8 +17,6 @@ def main():
 
     
     # RedTower(pygame.Rect(80,80,40,40))
-    Creeps(100, 2).spawn(pygame.Rect(160, 800, CREEP_WIDTH, CREEP_HEIGHT))
-    Creeps(100, 2).spawn(pygame.Rect(160, 1200, CREEP_WIDTH, CREEP_HEIGHT))
     
     while run:
 

@@ -56,8 +56,8 @@ class Shuriken(Projectiles):
     def do_damage(self, touched_creep, creeps_group):
         for creep in creeps_group:
             vector = Vector(self.rect.x - creep.rect.x, self.rect.y - creep.rect.y)
-            if vector.norm() <= TOWERS['orange']['splash radius']:
-                creep.lose_hp(TOWERS['orange']['damage'])
+            if vector.norm() <= TOWERS['blue']['splash radius']:
+                creep.lose_hp(TOWERS['blue']['damage'])
                 duration = TOWERS['blue']['slow_duration']
                 rate     = TOWERS['blue']['slow_rate']
                 creep.slow(duration, rate)

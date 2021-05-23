@@ -1,7 +1,7 @@
 import pygame
 
 BASE_HP   = 100
-BASE_GOLD = 500
+BASE_GOLD = 200
 
 DOWN   = pygame.K_j
 UP     = pygame.K_k
@@ -14,21 +14,21 @@ CANCEL = pygame.K_ESCAPE
 WAVES =\
 [
     {
-        'number_of_creeps': 20,
+        'number_of_creeps': 15,
         'hp': 200,
         'speed': 2
     },
 
     {
-        'number_of_creeps': 30,
+        'number_of_creeps': 20,
         'hp': 400,
         'speed': 2
     },
 
     {
-        'number_of_creeps': 30,
+        'number_of_creeps': 20,
         'hp': 400,
-        'speed': 7
+        'speed': 3
     }
 ]
 
@@ -43,7 +43,7 @@ TOWERS =\
     'red': {
         'shortcut':      pygame.K_q, 
         'cost':          10,
-        'damage':        20,
+        'damage':        60,
         'reload_time':   30,
         'splash radius': 0,
         'image_path':    'images/tour_pourpre.png',
@@ -65,12 +65,12 @@ TOWERS =\
     'blue': {
         'shortcut':      pygame.K_d, 
         'cost':          10,
-        'damage':        20,
+        'damage':        0,
         'reload_time':   90,
         'splash radius': 2 * GRID_WIDTH,
         'attack_range':  200,
-        'slow_duration': 3 * FPS,
-        'slow_rate':     0.99,        # À chaque projectile, la vitesse est multipliée par slow_rate
+        'slow_duration': 10 * FPS,
+        'slow_rate':     0.95,        # À chaque projectile, la vitesse est multipliée par slow_rate
         'image_path':    'images/tour_bleue.png'
     }
 }

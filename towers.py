@@ -30,7 +30,7 @@ class Tower(Sprite, ABC):
         for creep in Creeps.group:
             vector = Vector(creep.rect.x - self.rect.x, creep.rect.y - self.rect.y)
             if vector.norm() <= self.attack_range and self.reloading_time <= 0:
-                self.projectile(self.rect, (1/20) * vector)
+                self.projectile(self.rect, (1/10) * vector)
                 self.reloading_time = self.reload_time
                 return
 

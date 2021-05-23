@@ -55,8 +55,10 @@ class Game():
             if creep.rect.y > HEIGHT:
                 self.player.hp -= 1
                 creep.kill()
-            if creep.slow_counter == 0 and creep.speed != creep.max_speed:
+            if creep.slow_counter <= 0:
                 creep.recover_max_speed()
+            else:
+                creep.slow_counter -= 1
             creep.move()
             creep.update_health_bar(window)
             window.blit(creep.image, creep.rect)
@@ -68,7 +70,7 @@ class Game():
         self.handle_collisions()
 
 
-        if self.compteur % 1200 == 0:
+        if self.compteur % 1200 == 600:
             self.compteur = 0
             try:
                 Wave(self.wave).spawn()
