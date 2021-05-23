@@ -11,7 +11,7 @@ TOWERS =\
                     'damage':        80,
                     'reload_time':   30,
                     'splash radius': 0,
-                    'image_path':    'images/tour_pourpre.png',
+                    'image_path':    'images/tour_pourpre.xcf',
                     'attack_range':  600,
                 },
 
@@ -21,7 +21,7 @@ TOWERS =\
                     'damage':        500,
                     'reload_time':   15,
                     'splash radius': 0,
-                    'image_path':    'images/tour_pourpre_2.png',
+                    'image_path':    'images/tour_pourpre_2.xcf',
                     'attack_range':  600,
                 },
 
@@ -31,7 +31,7 @@ TOWERS =\
                     'damage':        1200,
                     'reload_time':   5,
                     'splash radius': 0,
-                    'image_path':    'images/tour_pourpre_3.png',
+                    'image_path':    'images/tour_pourpre_3.xcf',
                     'attack_range':  600,
                 },
             ],
@@ -47,7 +47,7 @@ TOWERS =\
                     'reload_time':   40,
                     'splash radius': 3 * GRID_WIDTH,
                     'attack_range':  300,
-                    'image_path':    'images/tour_orange.png'
+                    'image_path':    'images/tour_orange.xcf'
                 },
 
                 {
@@ -57,7 +57,7 @@ TOWERS =\
                     'reload_time':   40,
                     'splash radius': 5 * GRID_WIDTH,
                     'attack_range':  300,
-                    'image_path':    'images/tour_orange_2.png'
+                    'image_path':    'images/tour_orange_2.xcf'
                 },
 
                 {
@@ -67,7 +67,7 @@ TOWERS =\
                     'reload_time':   40,
                     'splash radius': 10 * GRID_WIDTH,
                     'attack_range':  300,
-                    'image_path':    'images/tour_orange_3.png'
+                    'image_path':    'images/tour_orange_3.xcf'
                 },
             ],
 
@@ -83,7 +83,7 @@ TOWERS =\
                     'attack_range':  200,
                     'slow_duration': 10 * FPS,
                     'slow_rate':     0.95,        # À chaque projectile, la vitesse est multipliée par slow_rate
-                    'image_path':    'images/tour_bleue.png'
+                    'image_path':    'images/tour_bleue.xcf'
                 },
 
                 {
@@ -95,7 +95,7 @@ TOWERS =\
                     'attack_range':  300,
                     'slow_duration': 10 * FPS,
                     'slow_rate':     0.75,        
-                    'image_path':    'images/tour_bleue_2.png'
+                    'image_path':    'images/tour_bleue_2.xcf'
                 },
 
                 {
@@ -107,7 +107,7 @@ TOWERS =\
                     'attack_range':  400,
                     'slow_duration': 100 * FPS,
                     'slow_rate':     0.55,       
-                    'image_path':    'images/tour_bleue_3.png'
+                    'image_path':    'images/tour_bleue_3.xcf'
                 },
             ]
 }
