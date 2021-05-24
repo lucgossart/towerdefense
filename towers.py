@@ -7,41 +7,29 @@ from constants     import *
 from projectiles   import Spear, Projectiles, Bomb, Shuriken
 from vector        import Vector
 from creeps        import Creeps
+from building      import Building, Rempart
 
-class Tower(Sprite, ABC):
+
+class Tower(Building):
     image_path:   str
     attack_range: int
-    projectile:   Projectiles
+    projectile:   object
     reload_time:  int
     image:        pygame.sprite.Sprite # non
     rect:         pygame.Rect
+    level:        int
 
     group = Group()
 
-    def __init__(self, properties_dict_list, type_):
-        super().__init__()
-        self.level = 0
-        self.properties_dict_list = properties_dict_list
-        for key, value in properties_dict_list[0].items():
-            self.__setattr__(key, value)
-
+    def __init__(self, properties_dict_list, type_, rectangle):
+        super().__init__(properties_dict_list, type_, rectangle)
         self.reloading_time = 0
-        self.type           = type_
-        
-        self.image = pygame.image.load(self.image_path).convert()
         self.image = pygame.transform.scale(self.image, (TOWER_WIDTH, TOWER_HEIGHT))
         Tower.group.add(self)
 
     def upgrade(self):
-        self.level += 1
-        try:
-            for key, value in self.properties_dict_list[self.level].items():
-                self.__setattr__(key, value)
-        except Exception as e:
-            print(e)
+        super().upgrade()
         self.upgrade_projectile()
-        self.image = pygame.image.load(self.image_path).convert()
-        self.image = pygame.transform.scale(self.image, (TOWER_WIDTH, TOWER_HEIGHT))
     
     @abstractmethod
     def upgrade_projectile(self):
@@ -58,11 +46,11 @@ class Tower(Sprite, ABC):
 
 class RedTower(Tower):
 
+    group = Group()
     def __init__(self, rectangle):
-        super().__init__(TOWERS['red'], 'red')
+        super().__init__(TOWERS['red'], 'red', rectangle)
         self.projectile = lambda *args: Spear(*args, level=0)
-        self.rect       = self.image.get_rect()
-        self.rect       = rectangle
+        RedTower.group.add(self)
 
     def upgrade_projectile(self):
         self.projectile = lambda *args: Spear(*args, level=self.level)
@@ -70,25 +58,42 @@ class RedTower(Tower):
 
 class OrangeTower(Tower):
 
+    group = Group()
     def __init__(self, rectangle):
-        super().__init__(TOWERS['orange'], 'orange')
+        super().__init__(TOWERS['orange'], 'orange', rectangle)
         self.projectile = lambda *args: Bomb(*args, level=0)
-        self.rect       = self.image.get_rect()
-        self.rect       = rectangle
+        OrangeTower.group.add(self)
 
     def upgrade_projectile(self):
         self.projectile = lambda *args: Bomb(*args, level=self.level)
 
+
 class BlueTower(Tower):
 
+    group = Group()
     def __init__(self, rectangle):
-        super().__init__(TOWERS['blue'], 'blue')
+        super().__init__(TOWERS['blue'], 'blue', rectangle)
         self.projectile = lambda *args: Shuriken(*args, level=0)
-        self.rect       = self.image.get_rect()
-        self.rect       = rectangle
+        BlueTower.group.add(self)
 
     def upgrade_projectile(self):
         self.projectile = lambda *args: Shuriken(*args, level=self.level)
+
+
+class TowerTypeFactory:
+    def __init__(self):
+        pass
+    @staticmethod
+    def return_type(keyword):
+        if keyword == 'red':
+            return RedTower
+        if keyword == 'blue':
+            return BlueTower
+        if keyword == 'orange':
+            return OrangeTower
+        if keyword == 'rempart':
+            return Rempart
+
 
 
 class TowerFactory:
@@ -102,5 +107,7 @@ class TowerFactory:
             return BlueTower(rectangle)
         if keyword == 'orange':
             return OrangeTower(rectangle)
+        if keyword == 'rempart':
+            return Rempart(rectangle)
 
 

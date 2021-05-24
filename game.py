@@ -5,12 +5,13 @@ from constants import *
 from tower_config import TOWERS
 from waves_config import WAVES
 from projectiles import Projectiles
-from towers      import TowerFactory
+from towers      import TowerFactory, TowerTypeFactory
 from player      import Player
 from creeps      import Creeps
 from cursor      import Cursor
 from towers      import Tower
 from waves       import Wave
+from building    import Building
 
 pygame.display.set_caption('TowerDefense de PGM\nRoad to 6k MMR')
 
@@ -32,6 +33,10 @@ class Game():
         self.add_message('score', "Score:", (0, 0))
         self.add_message('gold',  "Gold: ", (0, 40))
         self.add_message('hp',    "HP:   ", (0, 80))
+        for i in range(WIDTH // GRID_WIDTH):
+            for j in range(8, 10):
+                rect = pygame.Rect(i * GRID_WIDTH, HEIGHT - j * GRID_WIDTH, GRID_WIDTH, GRID_WIDTH)
+                TowerFactory.create_tower('rempart', rect)
 
     def draw(self):
 
@@ -45,8 +50,11 @@ class Game():
             message_surface = self.font.render(text + str(self.player.__getattribute__(key)), True, FONT_COLOR)
             window.blit(message_surface, position)
 
+        for building in Building.group:
+            building.update_health_bar(window)
+            window.blit(building.image, building.rect)
+
         for tower in Tower.group:
-            window.blit(tower.image, tower.rect)
             tower.attack()
             tower.reloading_time -= 1
 
@@ -120,8 +128,15 @@ class Game():
     def update_cursor_state(self):
 
         for key, value in TOWERS.items():
-            if self.pressed_keys.get(value[0]['shortcut']) and self.cursor.current_state == self.cursor:
-                self.cursor.current_state = TowerFactory.create_tower(key, self.cursor.rect)
+            if self.pressed_keys.get(value[0]['shortcut']):
+                if self.pressed_keys.get(pygame.K_LSHIFT) or self.pressed_keys.get(pygame.K_RSHIFT):
+                    self.cursor.current_state.kill()
+                    self.cursor.current_state = self.cursor
+                    self.cursor.image = SELECTED_TOWER
+                    self.select_next_tower(TowerTypeFactory.return_type(key).group)
+                elif self.cursor.current_state == self.cursor:
+                    self.cursor.current_state.kill()
+                    self.cursor.current_state = TowerFactory.create_tower(key, self.cursor.rect)
 
         if self.pressed_keys.get(CANCEL) and self.cursor.current_state != self.cursor:
             self.cursor.current_state.kill()
@@ -132,7 +147,8 @@ class Game():
             self.pop_tower()
 
         if self.pressed_keys.get(SELECT_NEXT_TOWER):
-            tower = self.select_next_tower()
+            self.select_next_tower(Tower.group)
+            self.cursor.current_state.kill()
             self.cursor.image = SELECTED_TOWER
 
         if self.pressed_keys.get(UPGRADE_TOWER):
@@ -146,12 +162,12 @@ class Game():
             except Exception as e:
                 print(e)
 
-    def select_next_tower(self):
+    def select_next_tower(self, group):
 
         minimal_abscissa_difference = 10_000
         minimal_ordinate_difference = 10_000
 
-        for tower in Tower.group:
+        for tower in group:
 
             ordinate_difference = ((tower.rect.y - self.cursor.rect.y) - 5)
             abscissa_difference = ((tower.rect.x - self.cursor.rect.x) - 5) % WIDTH
@@ -178,7 +194,6 @@ class Game():
             print("Pas assez riche, il faut", tower.cost)
             return
 
-        Tower.group.add(tower)
         self.player.pay(tower.cost)
         self.cursor.current_state.rect = pygame.Rect(self.cursor.rect.x, self.cursor.rect.y, GRID_WIDTH, TOWER_HEIGHT)
 
@@ -194,5 +209,9 @@ class Game():
         for projectile, creep in collision_dict.items():
             projectile.do_damage(creep[0], Creeps.group)
 
-
+        collision_dict = pygame.sprite.groupcollide(Building.group, Creeps.group, False, False)
+        for building, creep_list in collision_dict.items():
+            for creep in creep_list:
+                building.lose_hp()
+                creep.lose_hp(1_000 * creep.damage)
 
