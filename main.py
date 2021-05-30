@@ -1,41 +1,22 @@
 import pygame
-from towers      import RedTower
-from constants   import *
-from game        import Game
-from creeps      import Creeps
-from projectiles import Spear
-from vector      import Vector
+
+from game.game        import Game
+from config.constants import *
 
 
 def main():
 
     pygame.init()
-    game          = Game()
-    clock         = pygame.time.Clock()
-    run           = True
-    compteur      = 0
+    window      = pygame.display.set_mode((WIDTH, HEIGHT))
+    game        = Game()
+
+    game.set_cursor(CURSOR_IMAGE, GRID_WIDTH, WIDTH, HEIGHT)
+    game.set_displayer(window, BACKGROUND)
+    game.set_player()
 
     
-    # RedTower(pygame.Rect(80,80,40,40))
+    game.main_loop(FPS)
     
-    while run:
-
-        clock.tick(FPS)
-        compteur += 1
-        compteur %= 5
-
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-            if event.type == pygame.KEYDOWN:
-                game.pressed_keys[event.key] = True
-            if event.type == pygame.KEYUP:
-                game.pressed_keys[event.key] = False
-        if compteur == 0:
-            game.update()
-        game.draw()
-
     pygame.quit()
 
 

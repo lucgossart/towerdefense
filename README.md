@@ -23,6 +23,9 @@
 - 'q' : tour pourpre (standard) sur le curseur
 - 's' : tour orange (splash) sur le curseur
 - 'd' : tour bleue sur le curseur
+- 'r' : rempart
+
+- Une de ces touches en majuscule : sélectionner tour à tour les tours de ce type (pour amélioration)
 
 - 'Entrée' : poser la tour
 - 'TAB'    : sélectionner une tour
