@@ -1,7 +1,7 @@
 import pygame
 
 
-BACKGROUND  = pygame.image.load('images/map.jpg').convert()
+BACKGROUND  = pygame.image.load('images/map.jpg')
 
 BASE_HP   = 100
 BASE_GOLD = 100

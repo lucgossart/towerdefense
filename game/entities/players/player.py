@@ -1,10 +1,8 @@
-from constants import *
-
 class Player():
 
-    def __init__(self):
-        self.hp    = BASE_HP
-        self.gold  = BASE_GOLD
+    def __init__(self, base_hp, base_gold):
+        self.hp    = base_hp
+        self.gold  = base_gold
         self.score = 0
 
     def get_income(self, income):

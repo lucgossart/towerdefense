@@ -1,11 +1,13 @@
 from pygame.sprite import Sprite
+from math import floor
 
 class Cursor(Sprite):
 
-    def __init__(self, cursor_image, grid_width, map_width, map_height):
+    def __init__(self, cursor_images, grid_width, map_width, map_height):
         super().__init__()
-        self.image = cursor_image
-        self.rect  = self.image.get_rect()
+        self.image  = cursor_images['usual']
+        self.images = cursor_images
+        self.rect   = self.image.get_rect()
 
         self.grid_width = grid_width
         self.map_width  = map_width
@@ -35,8 +37,12 @@ class Cursor(Sprite):
         self.rect = tower.rect
         return tower
 
-    def place_at(self, rect):
-        self.rect = rect
+    def place_at(self, x, y):
+        self.rect.x = self.grid_width * floor(x // self.grid_width)
+        self.rect.y = self.grid_width * floor(y // self.grid_width)
+
+    def set_image(self, key):
+        self.image = self.images[key]
 
 
 
