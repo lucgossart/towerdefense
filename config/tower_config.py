@@ -1,6 +1,6 @@
-from constants import *
+from .constants import *
 
-TOWERS =\
+BUILDINGS =\
 {
     # tour basique
     'red':\
@@ -10,6 +10,8 @@ TOWERS =\
                     'cost':          40,
                     'damage':        80,
                     'reload_time':   30,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            2,
                     'splash radius': 0,
                     'image_path':    'images/tour_pourpre.xcf',
@@ -20,6 +22,8 @@ TOWERS =\
                     'shortcut':      pygame.K_q, 
                     'cost':          200,
                     'damage':        500,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            20,
                     'reload_time':   15,
                     'splash radius': 0,
@@ -31,6 +35,8 @@ TOWERS =\
                     'shortcut':      pygame.K_q, 
                     'cost':          1000,
                     'damage':        1200,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            200,
                     'reload_time':   5,
                     'splash radius': 0,
@@ -48,6 +54,8 @@ TOWERS =\
                     'cost':          50,
                     'damage':        40,
                     'reload_time':   40,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            2,
                     'splash radius': 3 * GRID_WIDTH,
                     'attack_range':  300,
@@ -59,6 +67,8 @@ TOWERS =\
                     'cost':          250,
                     'damage':        200,
                     'reload_time':   40,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            20,
                     'splash radius': 5 * GRID_WIDTH,
                     'attack_range':  300,
@@ -70,6 +80,8 @@ TOWERS =\
                     'cost':          1200,
                     'damage':        500,
                     'reload_time':   40,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            200,
                     'splash radius': 10 * GRID_WIDTH,
                     'attack_range':  300,
@@ -87,6 +99,8 @@ TOWERS =\
                     'reload_time':   50,
                     'splash radius': 2 * GRID_WIDTH,
                     'attack_range':  200,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            2,
                     'slow_duration': 10 * FPS,
                     'slow_rate':     0.95,        # À chaque projectile, la vitesse est multipliée par slow_rate
@@ -100,6 +114,8 @@ TOWERS =\
                     'reload_time':   30,
                     'splash radius': 2 * GRID_WIDTH,
                     'attack_range':  300,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            20,
                     'slow_duration': 10 * FPS,
                     'slow_rate':     0.75,        
@@ -112,6 +128,8 @@ TOWERS =\
                     'damage':        0,
                     'reload_time':   10,
                     'splash radius': 4 * GRID_WIDTH,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            200,
                     'attack_range':  400,
                     'slow_duration': 100 * FPS,
@@ -125,6 +143,8 @@ TOWERS =\
                 {
                     'shortcut':      pygame.K_f, 
                     'cost':          150,
+                    'width':         TOWER_WIDTH,
+                    'height':        TOWER_HEIGHT,
                     'hp':            2,
                     'image_path':    'images/tour_jaune.xcf'
                     ''
@@ -138,6 +158,8 @@ TOWERS =\
                 {
                     'shortcut':      pygame.K_r, 
                     'cost':          150,
+                    'width':         GRID_WIDTH,
+                    'height':        GRID_WIDTH,
                     'hp':            20,
                     'image_path':    'images/rempart.png'
                 },
@@ -145,6 +167,8 @@ TOWERS =\
                 {
                     'shortcut':      pygame.K_r, 
                     'cost':          1500,
+                    'width':         GRID_WIDTH,
+                    'height':        GRID_WIDTH,
                     'hp':            600,
                     'image_path':    'images/rempart_2.png'
                 },
@@ -152,6 +176,8 @@ TOWERS =\
                 {
                     'shortcut':      pygame.K_r, 
                     'cost':          3500,
+                    'width':         GRID_WIDTH,
+                    'height':        GRID_WIDTH,
                     'hp':            12_000,
                     'image_path':    'images/rempart3.xcf'
                 },

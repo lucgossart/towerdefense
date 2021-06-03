@@ -3,10 +3,10 @@ from math import floor
 
 class Cursor(Sprite):
 
-    def __init__(self, cursor_images, grid_width, map_width, map_height):
+    def __init__(self, cursor_image, grid_width, map_width, map_height):
         super().__init__()
-        self.image  = cursor_images['usual']
-        self.images = cursor_images
+        self.initial_image = cursor_image
+        self.image  = cursor_image
         self.rect   = self.image.get_rect()
 
         self.grid_width = grid_width
@@ -41,9 +41,8 @@ class Cursor(Sprite):
         self.rect.x = self.grid_width * floor(x // self.grid_width)
         self.rect.y = self.grid_width * floor(y // self.grid_width)
 
-    def set_image(self, key):
-        self.image = self.images[key]
-
+    def reset_image(self):
+        self.image = self.initial_image
 
 
 

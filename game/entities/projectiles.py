@@ -1,14 +1,16 @@
+import pygame
+
 from pygame.sprite import Sprite, Group
-from tower_config  import TOWERS
-from waves_config  import WAVES
-from abc import ABC, abstractmethod
-from vector import Vector
-from constants import *
+from abc           import ABC, abstractmethod
+
+from game.vector         import Vector
+from config.constants    import *
+from config.tower_config import TOWERS
+
 
 class Projectiles(Sprite, ABC):
 
     group = Group()
-
     def __init__(self, position: pygame.Rect, speed_vector, image, level):
 
         super().__init__()

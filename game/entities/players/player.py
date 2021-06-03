@@ -10,3 +10,4 @@ class Player():
 
     def pay(self, gold):
         self.gold -= gold
+        print(f"[*] Payé {gold} golds, il en reste {self.gold}")

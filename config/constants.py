@@ -4,7 +4,7 @@ import pygame
 BACKGROUND  = pygame.image.load('images/map.jpg')
 
 BASE_HP   = 100
-BASE_GOLD = 100
+BASE_GOLD = 1000
 
 
 GRID_WIDTH      = 40
@@ -43,6 +43,8 @@ SELECTED_TOWER = pygame.transform.scale(SELECTED_TOWER, (TOWER_WIDTH + 10, TOWER
 FONT       = "Perpetua"
 FONT_SIZE  = 40
 FONT_COLOR = (255, 125, 0) # (r, g, b)
+
+IMAGES_LIST = [CURSOR_IMAGE, PERE_NOEL, SPEAR_IMAGE, BOMB_IMAGE, SHURIKEN_IMAGE, SELECTED_TOWER]
 
 
 
