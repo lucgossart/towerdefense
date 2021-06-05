@@ -7,6 +7,7 @@ from .graphics.text     import Message
 from .graphics.cursor   import Cursor
 
 from .entities.generic_entity   import Entity
+from .entities.units.units      import Unit
 from .entities.buildings.towers import Tower
 from .entities.players.player   import Player
 from .controller.controller     import Controller
@@ -48,6 +49,10 @@ class Game():
 
             if compteur == 0:
                 self.controller.perform_actions(self.pressed_keys)
+                for unit in Unit.group:
+                    unit.move()
+                    unit.try_to_attack()
+
 
             self.displayer.display()
 

@@ -11,8 +11,8 @@ class Controller:
         self.towers_group = towers_group
 
         self.buildings_positions = buildings_positions
-        self.selected_building  = None
-        self.pending_building   = None
+        self.selected_building   = None
+        self.pending_building    = None
 
         self.displayer = displayer
 
@@ -62,7 +62,7 @@ class Controller:
         
         self.pending_building = None
         self.cursor.reset_image()
-
+ 
         self.selected_building = building
         self.displayer.display_selection(building.rect.x - 3, building.rect.y - 3, building.rect.width + 6, building.rect.height + 6)
 
@@ -99,12 +99,12 @@ class Controller:
             dictionary_list = BUILDINGS[self.pending_keyword]
             dictionary      = dictionary_list[level]
             width, height   = dictionary['width'], dictionary['height']
-
+ 
             rect = self.cursor.rect
             position = pygame.Rect(rect.x, rect.y, width, height)
             new_tower = self.pending_building(dictionary_list, position)
             self.buildings_positions[(position.x, position.y)] = new_tower
-
+ 
             self.pending_building = None
             self.cursor.reset_image()
 

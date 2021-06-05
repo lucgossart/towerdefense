@@ -1,11 +1,9 @@
 import pygame
 
 
-BACKGROUND  = pygame.image.load('images/map.jpg')
 
 BASE_HP   = 100
 BASE_GOLD = 1000
-
 
 GRID_WIDTH      = 40
 PROJECTILE_SIZE = 40
@@ -18,14 +16,19 @@ BUILDING_HEIGHT = 40
 
 FPS = 60
 
-WIDTH, HEIGHT = 639, 960
+WIDTH, HEIGHT = 1000, 1000
+CITY_WIDTH    = 100
 CREEP_WIDTH   = 100
 CREEP_HEIGHT  = 100
+
+BACKGROUND  = pygame.image.load('images/map.jpg')
+BACKGROUND  = pygame.transform.scale(BACKGROUND, (WIDTH, HEIGHT))
 
 CURSOR_IMAGE = pygame.image.load('images/cursor.png')
 CURSOR_IMAGE = pygame.transform.scale(CURSOR_IMAGE, (GRID_WIDTH, GRID_WIDTH))
 
-PERE_NOEL = pygame.image.load('images/png/Run (1).png')
+PERE_NOEL_PATH = 'images/png/Run (1).png'
+PERE_NOEL = pygame.image.load(PERE_NOEL_PATH)
 PERE_NOEL = pygame.transform.scale(PERE_NOEL, (CREEP_WIDTH, CREEP_HEIGHT))
 
 SPEAR_IMAGE = pygame.image.load('images/lance.png')

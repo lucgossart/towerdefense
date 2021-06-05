@@ -33,7 +33,8 @@ class Entity(Sprite, ABC):
         Entity.group.add(self)
 
     def define_image(self):
-        self.image = pygame.image.load(self.image_path).convert()
+        self.image = pygame.image.load(self.image_path)
+        self.image.convert()
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         # Affiche le noir en transparent. Un peu du bricolage...
         self.image.set_colorkey((0,0,0))
