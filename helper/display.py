@@ -1,8 +1,10 @@
-from typing import Tuple
-from pygame         import Surface
+from typing import Tuple, List
+from pygame.surface import Surface
 from pygame.font    import SysFont
 from pygame.display import set_mode
+from pygame.sprite  import Sprite
 
+import pygame
 import pygame.image
 import pygame.transform
 
@@ -61,8 +63,10 @@ class Image(Surface):
 
     Attribute: surface.
     """
-    def __init__(self, path: str, width: int, height: int):
+    def __init__(self, path: str, width: int, height: int, reverse: bool=False):
         self.surface = pygame.image.load(path)
+        if reverse:
+            self.surface = pygame.transform.flip(self.surface, True, False)
         self.width = width
         self.height = height
         self.surface = pygame.transform.scale(self.surface, (width, height))
@@ -79,3 +83,39 @@ class Rectangle:
         self.surface = Surface((width, height))
         self.surface.fill(color)
         self.position = (x, y)
+
+
+class Animation(Sprite):
+    """
+    Class for animated images.
+
+    Images are pygame.Surface objects accessed get_next_image().
+    Attributes:
+        images: List[Image]
+        index_current_image: int
+    Methods: get_next_image, _load_images
+    """
+    def __init__(self, path_list: List[str], width: int, height:int, reverse=False, period=70):
+        super().__init__()
+        self.images = self._load_images(path_list, width, height, reverse)
+        self.index_current_image = 0
+        self._counter = 0
+        self.period = period
+
+    def _load_images(self, path_list, width, height, reverse) -> List[Image]:
+        images = list()
+        for path in path_list:
+            images.append(Image(path, width, height, reverse))
+        return images
+
+    def get_next_image(self) -> Image:
+        self._counter += 1
+        if self._counter >= self.period:
+            length = len(self.images)
+            self.index_current_image += 1
+            self.index_current_image %= length
+            self._counter = 0
+        return self.images[self.index_current_image]
+
+
+
