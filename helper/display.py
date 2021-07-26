@@ -61,14 +61,18 @@ class Image(Surface):
     """
     Wrapper inheriting from pygame.Surface.
 
-    Attribute: surface.
+    Attribute: surface,
+    Method:    resize.
     """
     def __init__(self, path: str, width: int, height: int, reverse: bool=False):
         self.surface = pygame.image.load(path)
         if reverse:
             self.surface = pygame.transform.flip(self.surface, True, False)
-        self.width = width
+        self.width  = width
         self.height = height
+        self.resize(width, height)
+
+    def resize(self, width: int, height: int):
         self.surface = pygame.transform.scale(self.surface, (width, height))
 
         
@@ -116,6 +120,4 @@ class Animation(Sprite):
             self.index_current_image %= length
             self._counter = 0
         return self.images[self.index_current_image]
-
-
 

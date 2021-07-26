@@ -1,3 +1,4 @@
+"""Abstract classes of units, weapons, projectiles."""
 from __future__    import annotations
 from pygame.sprite import Sprite
 from typing        import Union, Tuple, List, Callable, Type, Dict
@@ -217,4 +218,31 @@ class HealthBar:
         self.unit.image.surface.blit(max_hp_rectangle.surface, position)
         self.unit.image.surface.blit(hp_rectangle.surface, position)
 
+class Building(Sprite, AbstractEntity):
+    """
+    Abstract building class.
 
+    Attributes:
+        position:  Vector, 
+        image:     Image, 
+        healthbar: HealthBar,
+        hp:        int,
+        hp_max:    int,
+        rect: pygame.Rect for collisions
+    Method: 
+        draw.
+    """
+    def __init__(self, position: Vector, hp: int, image: Image, healthbar_width=80, 
+                 healthbar_height=5, healthbar_x_offset=0, healthbar_y_offset=0):
+        super().__init__()
+        self.position = position
+        self.image = image
+        self.rect = pygame.Rect(position.x, position.y, image.width, image.height)
+        self.hp = hp
+        self.hp_max = hp
+        self.healthbar = HealthBar(self, healthbar_width, healthbar_height, 
+                x_offset=healthbar_x_offset, y_offset=healthbar_y_offset)
+
+    def draw(self, displayer: Displayer):
+        displayer.display(self.image.surface, self.position)
+        self.healthbar.draw()
