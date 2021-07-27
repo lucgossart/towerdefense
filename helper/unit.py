@@ -1,9 +1,10 @@
 """Abstract classes of units, weapons, projectiles."""
-from __future__    import annotations
-from pygame.sprite import Sprite
-from typing        import Union, Tuple, List, Callable, Type, Dict
-from dataclasses   import dataclass
-from abc           import ABC, abstractmethod
+from __future__     import annotations
+from pygame.sprite  import Sprite
+from pygame.surface import Surface
+from typing         import Union, Tuple, List, Callable, Type, Dict
+from dataclasses    import dataclass
+from abc            import ABC, abstractmethod
 
 import pygame
 
@@ -27,7 +28,7 @@ class AbstractEntity(ABC):
     Basic abstract class for units and buildings.
     """
     position:  Vector
-    image:     Image
+    surface:   Surface
     attacker:  Attacker
     hp_max:    int = 100
     hp:        int = 100
@@ -38,7 +39,7 @@ class Unit(Sprite, AbstractEntity):
     Basic unit class, inherits from pygame.Sprite.
 
     Attributes:
-        image:      pygame.Surface,
+        surface:    pygame.Surface,
         position:   Vector,
         move_speed: int,
         rect:       pygame.rect, for collisions,
@@ -46,15 +47,15 @@ class Unit(Sprite, AbstractEntity):
         weapon:     Weapon.
     Methods: attack, can_attack, move, can_move, draw.
     """
-    def __init__(self, position: Vector, move_speed: int, image: Image, weapon: Weapon,
+    def __init__(self, position: Vector, move_speed: int, surface: Surface, weapon: Weapon,
                  healthbar_width=80, healthbar_height=5, healthbar_x_offset=0, healthbar_y_offset=0):
         super().__init__()
         self.position = position
         self.move_speed = move_speed
         self.weapon = weapon
         self.weapon.position = self.position
-        self.image = image
-        self.rect = pygame.Rect(position.x, position.y, image.width, image.height)
+        self.surface = surface
+        self.rect = pygame.Rect(position.x, position.y, surface.get_width(), surface.get_height())
         self.healthbar = HealthBar(self, healthbar_width, healthbar_height, 
                 x_offset=healthbar_x_offset, y_offset=healthbar_y_offset)
 
@@ -76,7 +77,7 @@ class Unit(Sprite, AbstractEntity):
         return self.weapon._has_cooldown()
 
     def draw(self, displayer: Displayer):
-        displayer.display(self.image.surface, self.position)
+        displayer.display(self.surface, self.position)
         self.healthbar.draw()
 
 
@@ -85,7 +86,7 @@ class AnimatedUnit(Unit):
     Animated unit class, inherits from Unit.
 
     Attributes:
-        image:      pygame.Surface,
+        surface:    pygame.Surface,
         position:   Vector,
         move_speed: int,
         rect:       pygame.rect, for collisions,
@@ -96,7 +97,7 @@ class AnimatedUnit(Unit):
     def __init__(self, position: Vector, move_speed: int, anim_dict: Dict[str, Animation], weapon: Weapon,
                  healthbar_width=80, healthbar_height=5, healthbar_x_offset=0, healthbar_y_offset=0):
 
-        super().__init__(position, move_speed, anim_dict['walk'].images[0], weapon,
+        super().__init__(position, move_speed, anim_dict['walk'].surfaces[0], weapon,
              healthbar_width, healthbar_height, healthbar_x_offset, healthbar_y_offset)
         self.anim_dict = anim_dict
         self.animation = anim_dict['walk']
@@ -106,7 +107,7 @@ class AnimatedUnit(Unit):
 
     def draw(self, displayer: Displayer):
         """Overrides Unit.draw() in order to add the image animation."""
-        self.image = self.animation.get_next_image()
+        self.surface = self.animation.get_next_surface()
         super().draw(displayer)
 
 
@@ -138,7 +139,8 @@ class Weapon(Attacker):
         Reset the cooldown value to attack_rate.
         """
         self.cooldown = self.attack_rate
-        enemy_center = enemy.position + Vector(enemy.image.width / 2, enemy.image.height / 2)
+        enemy_center = enemy.position + Vector(enemy.surface.get_width() / 2,
+                enemy.surface.get_height() / 2)
         vector = enemy_center - self.position
         return self.projectile(self.position, vector)
 
@@ -159,17 +161,17 @@ class Projectile(Sprite):
 
     Attributes:
         position,
-        image,
+        surface,
         effects: dictionary of functions taking as parameter arguments
             on which to apply the effect.
-        vector (gives the displacement).
+        speed: Vector (gives the displacement),
     Method: move, append_effect, apply_effects.
     """
-    def __init__(self, position: Vector, image: Image, speed: Vector, effects=list()):
+    def __init__(self, position: Vector, surface: Surface, speed: Vector, effects=list()):
         super().__init__()
         self.position = position
-        self.image = image.surface
-        self.rect = pygame.Rect(position.x, position.y, image.width, image.height)
+        self.surface = surface
+        self.rect = pygame.Rect(position.x, position.y, surface.get_width(), surface.get_height())
         self.effects = effects
         norm = speed.norm()
         speed = (40/norm) * speed if norm != 0 else speed
@@ -215,8 +217,8 @@ class HealthBar:
         proportion = max(0.0001, proportion)
         hp_rectangle = Rectangle(0, 0, proportion * self.width, self.height, self.fg_color)
         position = (self.x_offset, self.y_offset)
-        self.unit.image.surface.blit(max_hp_rectangle.surface, position)
-        self.unit.image.surface.blit(hp_rectangle.surface, position)
+        self.unit.surface.blit(max_hp_rectangle.surface, position)
+        self.unit.surface.blit(hp_rectangle.surface, position)
 
 class Building(Sprite, AbstractEntity):
     """
@@ -224,7 +226,7 @@ class Building(Sprite, AbstractEntity):
 
     Attributes:
         position:  Vector, 
-        image:     Image, 
+        surface:   Surface
         healthbar: HealthBar,
         hp:        int,
         hp_max:    int,
@@ -232,17 +234,17 @@ class Building(Sprite, AbstractEntity):
     Method: 
         draw.
     """
-    def __init__(self, position: Vector, hp: int, image: Image, healthbar_width=80, 
+    def __init__(self, position: Vector, hp: int, surface: Surface, healthbar_width=80, 
                  healthbar_height=5, healthbar_x_offset=0, healthbar_y_offset=0):
         super().__init__()
         self.position = position
-        self.image = image
-        self.rect = pygame.Rect(position.x, position.y, image.width, image.height)
+        self.surface = surface
+        self.rect = pygame.Rect(position.x, position.y, surface.get_width(), surface.get_height())
         self.hp = hp
         self.hp_max = hp
         self.healthbar = HealthBar(self, healthbar_width, healthbar_height, 
                 x_offset=healthbar_x_offset, y_offset=healthbar_y_offset)
 
     def draw(self, displayer: Displayer):
-        displayer.display(self.image.surface, self.position)
+        displayer.display(self.surface, self.position)
         self.healthbar.draw()

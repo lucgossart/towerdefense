@@ -5,10 +5,7 @@ from helper.display import Image
 from helper.vector  import Vector
 
     
-basic_casern_image = Image('images/tavern/medieval-tavern_60000.png', width=160, height=160)
-def casern_image(image_width, image_height): 
-    basic_casern_image.resize(image_width, image_height)
-    return basic_casern_image
+basic_casern_image = Image('images/tavern/medieval-tavern_60000.png')
 
 class Casern(Building):
     """
@@ -40,8 +37,8 @@ class Casern(Building):
     ):
 
         self.popping_position = popping_position
-        image = casern_image(image_width, image_height)
-        super().__init__(position, hp, image, healtbar_width, healtbar_height, 
+        surface = basic_casern_image.get(image_width, image_height)
+        super().__init__(position, hp, surface, healtbar_width, healtbar_height, 
                          healtbar_x_offset, healtbar_y_offset)
 
     def pop_unit(self, unit_class) -> Unit:

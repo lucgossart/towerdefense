@@ -76,7 +76,7 @@ class Cursor:
 
     def draw_selected_building(self, displayer) -> None:
         if self.building_image != None:
-            displayer.display(self.building_image.surface, self.position)
+            displayer.display(self.building_image, self.position)
 
     def set_surface(self, surface: Surface, transparency: int=255) -> None:
         """
@@ -93,15 +93,17 @@ class Cursor:
         Select an entity. If entity is None, unselect.
 
         Sets the cursor at this position and scales its image 
-        to the proper size bur does not change the surface or
-        its transparency.
-        If entity is None, the appearance of the cursor remains
-        unchanged.
+        to the proper size and removes transparency if entity is not None.
+        If entity is None, transparency is set to zero but no rescaling
+        of the surface is done.
         """
         self.selected_entity = entity 
         if entity:
-            pygame.transform.scale(self.surface, (entity.image.width, entity.image.height))
+            self.surface = Image.resize(self.surface, entity.surface.get_width(), entity.surface.get_height())
+            self.surface.set_alpha(255)
             self.position = entity.position
+        else: 
+            self.surface.set_alpha(0)
         
     def place_on_grid(self, position: Vector) -> None:
         """Sets the cursor at the required position modulo the grid."""

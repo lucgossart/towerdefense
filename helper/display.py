@@ -57,23 +57,28 @@ class Text(Surface):
         self.position = position
 
 
-class Image(Surface):
+class Image:
     """
-    Wrapper inheriting from pygame.Surface.
+    To get surfaces from images.
 
+    For each image file, the constructor should be called once only.
+    The surface is then obtained via the get method.
     Attribute: surface,
-    Method:    resize.
+    Methods:   get, resize.
     """
-    def __init__(self, path: str, width: int, height: int, reverse: bool=False):
+    def __init__(self, path: str):
         self.surface = pygame.image.load(path)
+
+    def get(self, width: int, height: int, reverse: bool=False) -> Surface:
         if reverse:
             self.surface = pygame.transform.flip(self.surface, True, False)
         self.width  = width
         self.height = height
-        self.resize(width, height)
+        return self.resize(self.surface, width, height)
 
-    def resize(self, width: int, height: int):
-        self.surface = pygame.transform.scale(self.surface, (width, height))
+    @staticmethod
+    def resize(surface, width: int, height: int):
+        return pygame.transform.scale(surface, (width, height))
 
         
 class Rectangle:
@@ -91,33 +96,33 @@ class Rectangle:
 
 class Animation(Sprite):
     """
-    Class for animated images.
+    Class for animated surfaces.
 
-    Images are pygame.Surface objects accessed get_next_image().
+    surfaces are pygame.Surface objects accessed via get_next_surface().
     Attributes:
-        images: List[Image]
-        index_current_image: int
-    Methods: get_next_image, _load_images
+        surfaces: List[Surface]
+        index_current_surface: int
+    Methods: get_next_surface, _load_surfaces
     """
     def __init__(self, path_list: List[str], width: int, height:int, reverse=False, period=70):
         super().__init__()
-        self.images = self._load_images(path_list, width, height, reverse)
-        self.index_current_image = 0
+        self.surfaces = self._load_surfaces(path_list, width, height, reverse)
+        self.index_current_surface = 0
         self._counter = 0
         self.period = period
 
-    def _load_images(self, path_list, width, height, reverse) -> List[Image]:
-        images = list()
+    def _load_surfaces(self, path_list, width, height, reverse) -> List[Surface]:
+        surfaces = list()
         for path in path_list:
-            images.append(Image(path, width, height, reverse))
-        return images
+            surfaces.append(Image(path).get(width, height, reverse))
+        return surfaces
 
-    def get_next_image(self) -> Image:
+    def get_next_surface(self) -> Surface:
         self._counter += 1
         if self._counter >= self.period:
-            length = len(self.images)
-            self.index_current_image += 1
-            self.index_current_image %= length
+            length = len(self.surfaces)
+            self.index_current_surface += 1
+            self.index_current_surface %= length
             self._counter = 0
-        return self.images[self.index_current_image]
+        return self.surfaces[self.index_current_surface]
 
